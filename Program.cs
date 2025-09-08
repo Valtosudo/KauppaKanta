@@ -6,6 +6,8 @@ class Program
 {
     static void Main(string[] args)
     {
+        KauppaDP kauppa = new KauppaDP();
+        
         Console.WriteLine("Hello, World!");
     }
 }
