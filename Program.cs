@@ -15,13 +15,13 @@ class Program
             switch (vastaus)
             {
                 case "L":
-                        Console.WriteLine("Anna tuotteen nimi:");
-                        string? nimi = Console.ReadLine();
-                        Console.WriteLine("Anna tuotteen hinta:");
-                        double hinta = Convert.ToDouble(Console.ReadLine());
-                        //Lisätään tuote tietokantaan
-                        kauppaDB.LisaaTuote(nimi, hinta);
-                        break;
+                    Console.WriteLine("Anna tuotteen nimi:");
+                    string? nimi = Console.ReadLine();
+                    Console.WriteLine("Anna tuotteen hinta:");
+                    double hinta = Convert.ToDouble(Console.ReadLine());
+                    //Lisätään tuote tietokantaan
+                    kauppaDB.LisaaTuote(nimi, hinta);
+                    break;
                     
                 case "H":
                 //Haetaan tuotteet tietokannasta
@@ -32,9 +32,8 @@ class Program
                     break;
 
                 case "X":
-                {
                     return;
-                }
+
 
                 default:
                     Console.WriteLine("Väärä syöte, anna L, H tai X.");
