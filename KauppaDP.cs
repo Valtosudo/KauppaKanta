@@ -16,7 +16,7 @@ public class KauppaDP
             //Yksikertainen tietokanta, jossa on yksi taulu
             //Taulu tuotteet sarakkeet id, nimi, hinta
             var commandForTableCreation = connection.CreateCommand();
-            commandForTableCreation.CommandText = "CREATE TABLE IF NOT EXISTS tuotteet (id INTEGER PRIMARY KEY, nimi TEXT, hinta REAL)";
+            commandForTableCreation.CommandText = "CREATE TABLE IF NOT EXISTS tuotteet (id INTEGER PRIMARY KEY, nimi TEXT UNIQUE, hinta REAL)";
             commandForTableCreation.ExecuteNonQuery();
             //connection.Close();
         }
@@ -28,8 +28,24 @@ public class KauppaDP
         using (var connection = new SqliteConnection(_connectionString))
         {
             connection.Open();
+            //Tarkistetaan onko tuotetta jo tietokannassa
+            var commandForCheck = connection.CreateCommand();
+            commandForCheck.CommandText = "SELECT id FROM tuotteet WHERE nimi = @Nimi";
+            commandForCheck.Parameters.AddWithValue("Nimi", nimi);
+            object? id = commandForCheck.ExecuteScalar();
+            if (id != null)
+            {
+                Console.WriteLine("Tuote on jo tietokannassa ja se päivitetään.");
+                //Päivitetään tuotteen hinta
+                var commandForUpdate = connection.CreateCommand();
+                commandForUpdate.CommandText = "UPDATE tuotteet SET hinta = @Hinta WHERE id = @id";
+                commandForUpdate.Parameters.AddWithValue("Hinta", hinta);
+                commandForUpdate.Parameters.AddWithValue("id", (long)id);
+                commandForUpdate.ExecuteNonQuery();
+                return;
+            }
             //Lisätään tuote tietokantaan
-            var commandForInsert = connection.CreateCommand();
+                var commandForInsert = connection.CreateCommand();
             commandForInsert.CommandText = "INSERT INTO tuotteet (nimi, hinta) VALUES (@nimi, @hinta)";
             commandForInsert.Parameters.AddWithValue(@"nimi", nimi);
             commandForInsert.Parameters.AddWithValue(@"hinta", hinta);
